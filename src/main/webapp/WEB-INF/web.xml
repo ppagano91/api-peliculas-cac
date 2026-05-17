@@ -3,5 +3,15 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+  <display-name>API Películas</display-name>
+
+  <mime-mapping>
+    <extension>html</extension>
+    <mime-type>text/html;charset=UTF-8</mime-type>
+  </mime-mapping>
+
+  <mime-mapping>
+    <extension>htm</extension>
+    <mime-type>text/html;charset=UTF-8</mime-type>
+  </mime-mapping>
 </web-app>

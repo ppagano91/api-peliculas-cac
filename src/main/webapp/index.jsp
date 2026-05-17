@@ -1,11 +1,170 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API - Películas</title>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --card-border: #1f2937;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --primary: #38bdf8;
+      --primary-hover: #0ea5e9;
+      --code-bg: #020617;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.16), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 760px;
+    }
+
+    .card {
+      background: rgba(17, 24, 39, 0.88);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 2.5rem;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(12px);
+    }
+
+    .badge {
+      display: inline-block;
+      margin-bottom: 1rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--primary);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      margin-top: 1rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .stack {
+      margin-top: 1.25rem;
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      background: var(--code-bg);
+      color: #cbd5e1;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 0.95rem;
+    }
+
+    .links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .link-card {
+      display: block;
+      padding: 1rem;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--text);
+      text-decoration: none;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .link-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+      background: rgba(14, 165, 233, 0.12);
+    }
+
+    .link-card strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 1rem;
+    }
+
+    .link-card span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    footer {
+      margin-top: 1.5rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+
 <body>
-<h2>API - Películas (Servlet + JDBC)</h2>
-<p>No usa Spring Boot.</p>
-<ul>
-  <li><a href="movies">GET /movies</a></li>
-  <li><a href="swagger-ui/">Swagger UI</a></li>
-  <li><a href="openapi/openapi.yaml">OpenAPI YAML</a></li>
-</ul>
+  <main class="container">
+    <section class="card">
+      <span class="badge">Servlet + JDBC</span>
+
+      <h1>API de Películas</h1>
+
+      <p class="subtitle">
+        Proyecto base en Java para gestionar películas mediante una API simple.
+        No usa Spring Boot. Simple y clásico
+      </p>
+
+      <div class="stack">
+        Java · Servlet · JDBC · MySQL · Tomcat · OpenAPI
+      </div>
+
+      <nav class="links" aria-label="Enlaces principales">
+        <a class="link-card" href="movies">
+          <strong>GET /movies</strong>
+          <span>Listado general de películas</span>
+        </a>
+
+        <a class="link-card" href="swagger-ui/">
+          <strong>Swagger UI</strong>
+          <span>Documentación interactiva de la API</span>
+        </a>
+
+        <a class="link-card" href="openapi/openapi.yaml">
+          <strong>OpenAPI YAML</strong>
+          <span>Especificación técnica de endpoints</span>
+        </a>
+      </nav>
+    </section>
+
+    <footer>
+      API - Películas · Java base sin Spring Boot
+    </footer>
+  </main>
 </body>
 </html>
