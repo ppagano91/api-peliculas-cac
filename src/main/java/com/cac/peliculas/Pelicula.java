@@ -1,68 +1,134 @@
 package com.cac.peliculas;
 
+import java.math.BigDecimal;
+
 public class Pelicula {
-    private int idPelicula;
-    private String titulo;
-    private String genero;
-    private String duracion;
-    private String imagen;
 
-    // Constructor con todos los atributos
-    public Pelicula(int idPelicula, String titulo, String genero, String duracion, String imagen) {
-        this.idPelicula = idPelicula;
-        this.titulo = titulo;
-        this.genero = genero;
-        this.duracion = duracion;
-        this.imagen = imagen;
-    }
+    private int id;
+    private String title;
+    private String director;
+    private String castMembers;
+    private String synopsis;
+    private short releaseYear;
+    private String genre;
+    private int durationMinutes;
+    private String language;
+    private String country;
+    private BigDecimal rating;
+    private String posterUrl;
 
-    // Constructor por defecto
     public Pelicula() {}
 
-    public int getIdPelicula() {
-        return idPelicula;
-    }
-    
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public String getGenero() {
-            return genero;
-    }
-
-    public String getDuracion() {
-            return duracion;
-    }
-
-    public String getImagen() {
-            return imagen;
+    public Pelicula(int id, String title, String director, String castMembers, String synopsis,
+                    short releaseYear, String genre, int durationMinutes, String language,
+                    String country, BigDecimal rating, String posterUrl) {
+        this.id = id;
+        this.title = title;
+        this.director = director;
+        this.castMembers = castMembers;
+        this.synopsis = synopsis;
+        this.releaseYear = releaseYear;
+        this.genre = genre;
+        this.durationMinutes = durationMinutes;
+        this.language = language;
+        this.country = country;
+        this.rating = rating;
+        this.posterUrl = posterUrl;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public int getId() {
+        return id;
     }
 
-    public void setGenero(String genero) {
-        this.genero = genero;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setDuracion(String duracion) {
-        this.duracion = duracion;
+    public String getTitle() {
+        return title;
     }
 
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    @Override
-    public String toString() {
-        return "Pelicula{" +
-                "idPelicula=" + idPelicula +
-                ", titulo='" + titulo + '\'' +
-                ", genero='" + genero + '\'' +
-                ", duracion='" + duracion + '\'' +
-                ", imagen='" + imagen + '\'' +
-                '}';
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getCastMembers() {
+        return castMembers;
+    }
+
+    public void setCastMembers(String castMembers) {
+        this.castMembers = castMembers;
+    }
+
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
+    }
+
+    public short getReleaseYear() {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(short releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public int getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public void setDurationMinutes(int durationMinutes) {
+        this.durationMinutes = durationMinutes;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public BigDecimal getRating() {
+        return rating;
+    }
+
+    public void setRating(BigDecimal rating) {
+        this.rating = rating;
+    }
+
+    public String getPosterUrl() {
+        return posterUrl;
+    }
+
+    public void setPosterUrl(String posterUrl) {
+        this.posterUrl = posterUrl;
     }
 }
