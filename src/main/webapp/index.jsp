@@ -146,11 +146,6 @@
       </div>
 
       <nav class="links" aria-label="Enlaces principales">
-        <a class="link-card" href="movies">
-          <strong>GET /movies</strong>
-          <span>Listado general de películas</span>
-        </a>
-
         <a class="link-card" href="swagger-ui/">
           <strong>Swagger UI</strong>
           <span>Documentación interactiva</span>
@@ -159,6 +154,11 @@
         <a class="link-card" href="openapi/openapi.yaml">
           <strong>OpenAPI YAML</strong>
           <span>Especificación de la API</span>
+        </a>
+
+        <a class="link-card" href="https://github.com/ppagano91/api-peliculas-cac" target="_blank" rel="noopener noreferrer">
+          <strong>Repositorio GitHub</strong>
+          <span>Código fuente del proyecto</span>
         </a>
       </nav>
     </section>
