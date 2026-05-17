@@ -54,6 +54,13 @@
       <artifactId>mysql-connector-java</artifactId>
       <version>8.0.31</version>
     </dependency>
+
+    <!-- Carga opcional de .env en desarrollo (precedencia: variables de sistema) -->
+    <dependency>
+      <groupId>io.github.cdimascio</groupId>
+      <artifactId>dotenv-java</artifactId>
+      <version>3.0.0</version>
+    </dependency>
   </dependencies>
 
 
