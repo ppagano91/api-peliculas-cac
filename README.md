@@ -1,33 +1,109 @@
 # api-peliculas
 
-
-
 API de películas en Java: aplicación **WAR** con **Servlets** (`javax.servlet`), **Jackson** para JSON y **MySQL** mediante JDBC.
 
+No usa Spring Boot: el código es Java base con un servlet que expone los endpoints.
 
+## Requisitos
 
-## Levantar API localmente
+- **JDK 17**
+- **Maven 3.x**
+- **Apache Tomcat 9.x** (compatible con `javax.servlet`)
+- **MySQL** en ejecución
 
+## Configuración
 
+1. Copiá [`.env.example`](.env.example) a **`.env`** en la raíz del repositorio.
+2. Completá al menos **`MOVIES_DB_PASSWORD`**.
 
-1. **Requisitos:** JDK **17**, **Maven 3.x**, **Apache Tomcat 9.x** (compatible con `javax.servlet`), **MySQL** en ejecución.
+| Variable | Obligatoria | Valor por defecto |
+|----------|-------------|-------------------|
+| `MOVIES_JDBC_URL` | No | `jdbc:mysql://localhost:3306/movies_cac` |
+| `MOVIES_DB_USER` | No | `root` |
+| `MOVIES_DB_PASSWORD` | **Sí** | — |
+| `MOVIES_DOTENV_DIRECTORY` | No | directorio de trabajo del proceso |
 
-2. **Variables de entorno / `.env`:** la conexión a MySQL se configura con **`MOVIES_JDBC_URL`**, **`MOVIES_DB_USER`** y **`MOVIES_DB_PASSWORD`** (obligatoria: entorno o `.env`). Valores por defecto solo para URL y usuario si no los definís. Copiá **[`.env.example`](.env.example)** a **`.env`** en la raíz del repo y completá al menos la contraseña. El archivo **`.env`** está en `.gitignore` y no debe subirse al repositorio.
+La conexión la resuelve `ConfiguracionJdbc.java` (variables de sistema → `.env` → defaults parciales).
 
-3. **Tomcat y el archivo `.env`:** al arrancar Tomcat desde la terminal, el directorio de trabajo suele ser `bin` del Tomcat, no la raíz del proyecto. Si el `.env` no se carga, definí las mismas variables en el sistema, en `setenv.bat` / `setenv.sh`, o en la configuración del servidor en tu IDE; opcionalmente podés fijar **`MOVIES_DOTENV_DIRECTORY`** apuntando a la carpeta donde está tu `.env` (definila como variable de **sistema** o en el IDE, no hace falta repetirla dentro del `.env`).
+## Crear la base de datos
 
-4. **Dependencias de infraestructura:** creá la base y la tabla `peliculas` en MySQL (no hay migraciones en el repo). Detalle y URLs en la guía enlazada abajo.
+```powershell
+Get-Content sql\init.sql | mysql -u root -p
+```
 
-5. **Build y despliegue:** `mvn clean package` → copiá o publicá `target/api-peliculas.war` en Tomcat e iniciá el servidor.
+Crea la base `movies_cac`, la tabla `peliculas` y tres películas de ejemplo.
 
-6. **Comprobar que funciona:** con Tomcat en el puerto por defecto **8080**, abrí  
+### Tabla `peliculas`
 
-   `http://localhost:8080/api-peliculas/peliculas` (GET devuelve JSON) y  
+| Columna | Tipo | Notas |
+|---------|------|--------|
+| `id` | INT, PK, autoincrement | |
+| `title` | VARCHAR(255), NOT NULL | |
+| `director` | VARCHAR(255), NOT NULL | |
+| `cast_members` | TEXT | Reparto (en JSON: `castMembers`) |
+| `synopsis` | TEXT | |
+| `release_year` | SMALLINT, NOT NULL | En JSON: `releaseYear` |
+| `genre` | VARCHAR(100), NOT NULL | |
+| `duration_minutes` | INT, NOT NULL | En JSON: `durationMinutes` |
+| `language` | VARCHAR(50) | |
+| `country` | VARCHAR(100) | |
+| `rating` | DECIMAL(3,1) | 0–10 |
+| `poster_url` | VARCHAR(500) | En JSON: `posterUrl` |
 
-   `http://localhost:8080/api-peliculas/` (página de bienvenida).
+## Compilar
 
+Desde la raíz del proyecto:
 
+```powershell
+mvn clean package
+```
 
-Documentación detallada: **[docs/local-setup.md](docs/local-setup.md)**.
+Genera `target/api-peliculas.war`.
 
+## Ejecutar
 
+1. Copiá el WAR a Tomcat: `webapps/api-peliculas.war`
+2. Iniciá Tomcat (puerto **8080** por defecto)
+3. Asegurate de que Tomcat encuentre el `.env` (ver [docs/local-setup.md](docs/local-setup.md))
+
+**URLs (context path `/api-peliculas`):**
+
+| Recurso | URL |
+|---------|-----|
+| Página de bienvenida | http://localhost:8080/api-peliculas/ |
+| Listar películas (GET) | http://localhost:8080/api-peliculas/peliculas |
+| Alta (POST) | http://localhost:8080/api-peliculas/peliculas |
+
+### Ejemplo JSON para POST
+
+```json
+{
+  "title": "Matrix",
+  "director": "Lana Wachowski, Lilly Wachowski",
+  "castMembers": "Keanu Reeves, Laurence Fishburne",
+  "synopsis": "Un hacker descubre la verdadera naturaleza de la realidad.",
+  "releaseYear": 1999,
+  "genre": "Sci-Fi",
+  "durationMinutes": 136,
+  "language": "English",
+  "country": "USA",
+  "rating": 8.7,
+  "posterUrl": "https://example.com/posters/matrix.jpg"
+}
+```
+
+Respuesta exitosa de POST: **201** y el `id` numérico generado en JSON.
+
+## Archivos principales
+
+| Archivo | Rol |
+|---------|-----|
+| `pom.xml` | Dependencias Maven y empaquetado WAR |
+| `sql/init.sql` | Esquema y datos iniciales |
+| `ConfiguracionJdbc.java` | URL, usuario y contraseña |
+| `Conexion.java` | Conexión JDBC a MySQL |
+| `Pelicula.java` | Modelo Java (mapeo JSON con Jackson) |
+| `Controlador.java` | Servlet `/peliculas` (GET y POST) |
+| `src/main/webapp/index.jsp` | Página de inicio del WAR |
+
+Guía detallada: **[docs/local-setup.md](docs/local-setup.md)**.
