@@ -27,7 +27,16 @@ public final class ConfiguracionJdbc {
     }
 
     public static String getJdbcUrl() {
-        return firstNonBlank(System.getenv("MOVIES_JDBC_URL"), DOTENV.get("MOVIES_JDBC_URL"), DEFAULT_JDBC_URL);
+        return withUtf8Params(firstNonBlank(
+                System.getenv("MOVIES_JDBC_URL"), DOTENV.get("MOVIES_JDBC_URL"), DEFAULT_JDBC_URL));
+    }
+
+    private static String withUtf8Params(String jdbcUrl) {
+        if (jdbcUrl.contains("characterEncoding=")) {
+            return jdbcUrl;
+        }
+        String separator = jdbcUrl.contains("?") ? "&" : "?";
+        return jdbcUrl + separator + "characterEncoding=UTF-8&useUnicode=true";
     }
 
     public static String getUser() {

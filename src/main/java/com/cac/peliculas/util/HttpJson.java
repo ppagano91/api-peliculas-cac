@@ -13,7 +13,8 @@ public final class HttpJson {
     public static void writeJson(HttpServletResponse response, ObjectMapper mapper, int status, Object body)
             throws IOException {
         response.setStatus(status);
-        response.setContentType("application/json;charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=UTF-8");
         mapper.writeValue(response.getWriter(), body);
     }
 
