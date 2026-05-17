@@ -1,6 +1,6 @@
 # Cómo levantar la API localmente
 
-Aplicación **Servlet + JDBC** empaquetada como **WAR**. Se despliega en **Apache Tomcat 9.x** (namespace `javax.servlet`). No es Spring Boot.
+Aplicación **Servlet + JDBC** empaquetada como **WAR**. Se despliega en **Apache Tomcat 9.x** (namespace `javax.servlet`). **No es Spring Boot.**
 
 ## Requisitos
 
@@ -11,7 +11,7 @@ Aplicación **Servlet + JDBC** empaquetada como **WAR**. Se despliega en **Apach
 
 ## Configuración
 
-`ConfiguracionJdbc.java` lee:
+`config/ConfiguracionJdbc.java` lee:
 
 | Variable | Obligatoria | Default |
 |----------|-------------|---------|
@@ -28,7 +28,7 @@ Copiá `.env.example` a `.env`. Si Tomcat arranca fuera de la raíz del repo, de
 Get-Content sql\init.sql | mysql -u root -p
 ```
 
-El servlet espera la tabla `peliculas` con las columnas definidas en `sql/init.sql`.
+El servlet espera la tabla `movies` con las columnas definidas en `sql/init.sql`.
 
 ## Build y despliegue
 
@@ -44,7 +44,31 @@ Iniciá Tomcat. Context path habitual: **`/api-peliculas`**.
 | Prueba | URL |
 |--------|-----|
 | Inicio | http://localhost:8080/api-peliculas/ |
-| GET listado | http://localhost:8080/api-peliculas/peliculas |
+| GET listado | http://localhost:8080/api-peliculas/movies |
+| Swagger UI | http://localhost:8080/api-peliculas/swagger-ui/ |
+| Filtro ejemplo | http://localhost:8080/api-peliculas/movies?genre=Sci-Fi&min_rating=8 |
+
+## Probar CRUD con curl
+
+```powershell
+# Listar
+curl http://localhost:8080/api-peliculas/movies
+
+# Por ID
+curl http://localhost:8080/api-peliculas/movies/1
+
+# Crear
+curl -X POST http://localhost:8080/api-peliculas/movies -H "Content-Type: application/json" -d "{\"title\":\"Test\",\"genre\":\"Drama\",\"releaseYear\":2020,\"durationMinutes\":90}"
+
+# Actualizar completo
+curl -X PUT http://localhost:8080/api-peliculas/movies/1 -H "Content-Type: application/json" -d @movie.json
+
+# Actualizar parcial
+curl -X PATCH http://localhost:8080/api-peliculas/movies/1 -H "Content-Type: application/json" -d "{\"rating\":9.5}"
+
+# Eliminar
+curl -X DELETE http://localhost:8080/api-peliculas/movies/1
+```
 
 ## Problemas comunes
 
@@ -52,13 +76,13 @@ Iniciá Tomcat. Context path habitual: **`/api-peliculas`**.
 |----------|---------|
 | Falta `MOVIES_DB_PASSWORD` | `.env` o variables de entorno |
 | `.env` no cargado en Tomcat | `MOVIES_DOTENV_DIRECTORY` o `setenv` |
-| 404 en `/peliculas` | Context path (`/api-peliculas`) |
-| Error SQL | Ejecutar `sql/init.sql`; columnas deben coincidir con `Controlador.java` |
+| 404 en `/movies` | Context path (`/api-peliculas`) |
+| Error SQL | Ejecutar `sql/init.sql`; tabla `movies` |
 | `javax.servlet` no encontrado | Usar Tomcat 9, no Tomcat 10+ sin migrar a Jakarta |
 
 ## Archivos clave
 
-- `Controlador.java` — `@WebServlet("/peliculas")`, GET y POST
-- `Conexion.java` — JDBC
-- `Pelicula.java` — modelo JSON
+- `servlet/MovieServlet.java` — `@WebServlet("/movies")`, CRUD completo
+- `repository/MovieRepository.java` — JDBC
+- `model/Movie.java` — modelo JSON
 - `sql/init.sql` — esquema MySQL

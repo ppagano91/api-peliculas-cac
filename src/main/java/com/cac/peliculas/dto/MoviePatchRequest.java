@@ -1,48 +1,25 @@
-package com.cac.peliculas;
+package com.cac.peliculas.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 
-public class Pelicula {
+/** Cuerpo para PATCH /movies/{id} — solo los campos enviados se actualizan. */
+public class MoviePatchRequest {
 
-    private int id;
     private String title;
     private String director;
-    private String castMembers;
+
+    @JsonProperty("cast")
+    private String cast;
+
     private String synopsis;
-    private short releaseYear;
+    private Short releaseYear;
     private String genre;
-    private int durationMinutes;
+    private Integer durationMinutes;
     private String language;
     private String country;
     private BigDecimal rating;
     private String posterUrl;
-
-    public Pelicula() {}
-
-    public Pelicula(int id, String title, String director, String castMembers, String synopsis,
-                    short releaseYear, String genre, int durationMinutes, String language,
-                    String country, BigDecimal rating, String posterUrl) {
-        this.id = id;
-        this.title = title;
-        this.director = director;
-        this.castMembers = castMembers;
-        this.synopsis = synopsis;
-        this.releaseYear = releaseYear;
-        this.genre = genre;
-        this.durationMinutes = durationMinutes;
-        this.language = language;
-        this.country = country;
-        this.rating = rating;
-        this.posterUrl = posterUrl;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -60,12 +37,12 @@ public class Pelicula {
         this.director = director;
     }
 
-    public String getCastMembers() {
-        return castMembers;
+    public String getCast() {
+        return cast;
     }
 
-    public void setCastMembers(String castMembers) {
-        this.castMembers = castMembers;
+    public void setCast(String cast) {
+        this.cast = cast;
     }
 
     public String getSynopsis() {
@@ -76,11 +53,11 @@ public class Pelicula {
         this.synopsis = synopsis;
     }
 
-    public short getReleaseYear() {
+    public Short getReleaseYear() {
         return releaseYear;
     }
 
-    public void setReleaseYear(short releaseYear) {
+    public void setReleaseYear(Short releaseYear) {
         this.releaseYear = releaseYear;
     }
 
@@ -92,11 +69,11 @@ public class Pelicula {
         this.genre = genre;
     }
 
-    public int getDurationMinutes() {
+    public Integer getDurationMinutes() {
         return durationMinutes;
     }
 
-    public void setDurationMinutes(int durationMinutes) {
+    public void setDurationMinutes(Integer durationMinutes) {
         this.durationMinutes = durationMinutes;
     }
 

@@ -1,4 +1,4 @@
-package com.cac.peliculas;
+package com.cac.peliculas.config;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -34,10 +34,6 @@ public final class ConfiguracionJdbc {
         return firstNonBlank(System.getenv("MOVIES_DB_USER"), DOTENV.get("MOVIES_DB_USER"), DEFAULT_USER);
     }
 
-    /**
-     * Contraseña: solo entorno o .env (sin valor por defecto en código).
-     * Cadena vacía es válida si tu MySQL no usa contraseña.
-     */
     public static String getPassword() {
         if (System.getenv("MOVIES_DB_PASSWORD") != null) {
             return System.getenv("MOVIES_DB_PASSWORD");

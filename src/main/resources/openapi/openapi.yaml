@@ -1,0 +1,289 @@
+openapi: 3.0.3
+info:
+  title: Movies API
+  description: |
+    API de películas con Java Servlet + JDBC + Jackson.
+    **No usa Spring Boot.**
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api-peliculas
+    description: Tomcat local (context path /api-peliculas)
+
+tags:
+  - name: movies
+    description: Operaciones CRUD sobre películas
+
+paths:
+  /movies:
+    get:
+      tags: [movies]
+      summary: Listar películas
+      description: Devuelve todas las películas. Los filtros de query son opcionales y combinables.
+      parameters:
+        - $ref: '#/components/parameters/title'
+        - $ref: '#/components/parameters/genre'
+        - $ref: '#/components/parameters/director'
+        - $ref: '#/components/parameters/release_year'
+        - $ref: '#/components/parameters/country'
+        - $ref: '#/components/parameters/language'
+        - $ref: '#/components/parameters/min_rating'
+        - $ref: '#/components/parameters/max_rating'
+      responses:
+        '200':
+          description: Lista de películas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/DatabaseError'
+    post:
+      tags: [movies]
+      summary: Crear película
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieRequest'
+      responses:
+        '201':
+          description: Película creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/DatabaseError'
+
+  /movies/{id}:
+    parameters:
+      - $ref: '#/components/parameters/id'
+    get:
+      tags: [movies]
+      summary: Obtener película por ID
+      responses:
+        '200':
+          description: Película encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/DatabaseError'
+    put:
+      tags: [movies]
+      summary: Reemplazar película (actualización completa)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieRequest'
+      responses:
+        '200':
+          description: Película actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/DatabaseError'
+    patch:
+      tags: [movies]
+      summary: Actualizar película parcialmente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoviePatchRequest'
+      responses:
+        '200':
+          description: Película actualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/DatabaseError'
+    delete:
+      tags: [movies]
+      summary: Eliminar película
+      responses:
+        '204':
+          description: Película eliminada
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/DatabaseError'
+
+components:
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+    title:
+      name: title
+      in: query
+      schema:
+        type: string
+      description: Búsqueda parcial (case-insensitive) por título
+    genre:
+      name: genre
+      in: query
+      schema:
+        type: string
+    director:
+      name: director
+      in: query
+      schema:
+        type: string
+    release_year:
+      name: release_year
+      in: query
+      schema:
+        type: integer
+    country:
+      name: country
+      in: query
+      schema:
+        type: string
+    language:
+      name: language
+      in: query
+      schema:
+        type: string
+    min_rating:
+      name: min_rating
+      in: query
+      schema:
+        type: number
+        format: float
+    max_rating:
+      name: max_rating
+      in: query
+      schema:
+        type: number
+        format: float
+
+  schemas:
+    MovieRequest:
+      type: object
+      required: [title]
+      properties:
+        title:
+          type: string
+        director:
+          type: string
+        cast:
+          type: string
+        synopsis:
+          type: string
+        releaseYear:
+          type: integer
+        genre:
+          type: string
+        durationMinutes:
+          type: integer
+          minimum: 1
+        language:
+          type: string
+        country:
+          type: string
+        rating:
+          type: number
+          minimum: 0
+          maximum: 10
+        posterUrl:
+          type: string
+          format: uri
+    MoviePatchRequest:
+      type: object
+      description: Solo los campos enviados se actualizan.
+      properties:
+        title:
+          type: string
+        director:
+          type: string
+        cast:
+          type: string
+        synopsis:
+          type: string
+        releaseYear:
+          type: integer
+        genre:
+          type: string
+        durationMinutes:
+          type: integer
+        language:
+          type: string
+        country:
+          type: string
+        rating:
+          type: number
+        posterUrl:
+          type: string
+    MovieResponse:
+      allOf:
+        - $ref: '#/components/schemas/MovieRequest'
+        - type: object
+          required: [id]
+          properties:
+            id:
+              type: integer
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: validation_error
+        message:
+          type: string
+          example: title is required
+
+  responses:
+    BadRequest:
+      description: Request inválido
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Película no encontrada
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    DatabaseError:
+      description: Error de base de datos
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
